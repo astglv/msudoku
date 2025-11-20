@@ -16,6 +16,10 @@ if nargin < 2
 end
 
 % Game introduction at the beginning
+
+hFig = figure('Name','Sudoku','NumberTitle','off',...
+              'Position',[200 100 660 620],...
+              'MenuBar','none','Resize','off');
 if showIntro
     introText = {
         '                  === SUDOKU GAME ===';
@@ -44,10 +48,6 @@ if showIntro
     msgbox(introText, 'Welcome to Sudoku', 'help');
 end
 
-hFig = figure('Name','Sudoku','NumberTitle','off',...
-              'Position',[200 200 660 620],...
-              'MenuBar','none','Resize','off');
-movegui(hFig,'center');
 
 style = build_style();
 
