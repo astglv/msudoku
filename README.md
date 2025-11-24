@@ -7,10 +7,10 @@ and validation helpers.
 
 ### Required Conditions (5 points)
 
-- ✅ **Game board (playing area) stored in a matrix** - 2 pts
+- **Game board (playing area) stored in a matrix** - 2 pts
   - The 9x9 Sudoku grid is stored in matrices (`puzzle`, `fullGrid`) and displayed using `uicontrol` edit boxes.
 
-- ✅ **Use exactly 2–3 commands that are not mentioned in any PDF** - 0 pts
+- **Use exactly 2–3 commands that are not mentioned in any PDF** - 0 pts
   - Functions potentially not in PDFs (need verification):
     - `setappdata` / `getappdata` - GUI data storage
     - `movegui` - GUI positioning
@@ -24,35 +24,35 @@ and validation helpers.
     - `isfield` - struct field checking
   - Note: Most core functions (`for`, `while`, `if`, `switch`, `zeros`, `ones`, `size`, `numel`, `any`, `all`, `sum`, `sort`, `isequal`, `floor`, `mod`, `num2str`, `str2double`, `sprintf`, `figure`, `uicontrol`, `get`, `set`, `gcf`, `nargin`) are standard and should be in PDFs.
 
-- ✅ **Functions, for-loops, while, if, switch used in the form shown in the exercises** - 0 pts
+- **Functions, for-loops, while, if, switch used in the form shown in the exercises** - 0 pts
   - All control structures (`for`, `while`, `if`, `switch`) are used throughout the codebase.
 
-- ✅ **Working with matrices and vectors as practiced in the exercises** - 0 pts
+- **Working with matrices and vectors as practiced in the exercises** - 0 pts
   - Extensive matrix operations: indexing, assignment, logical masks, reshaping, etc.
 
-- ✅ **Use 3 levels/difficulty tiers** - 2 pts
+- **Use 3 levels/difficulty tiers** - 2 pts
   - Three difficulty levels: Easy (30 blanks), Medium (40 blanks), Hard (50 blanks).
 
-- ✅ **Custom map in .txt, at least 2 versions (each student creates one)** - 1 pt
+- **Custom map in .txt, at least 2 versions (each student creates one)** - 1 pt
   - Two custom puzzle files: `puzzle1.txt` and `puzzle2.txt`
   - Load functionality via "Load Puzzle" button or input parameter.
 
 ### Code – 6 points
 
-- ✅ **At the beginning: briefly introduce the game – rules, controls** - 2 pts
+- **At the beginning: briefly introduce the game – rules, controls** - 2 pts
   - Game introduction displayed via `msgbox` when `sudoku_gui()` is called (can be disabled with `sudoku_gui(false)`).
   - Introduction includes: rules, controls, and scoring system.
 
-- ✅ **Any input parameters** - 1 pt
+- **Any input parameters** - 1 pt
   - Function signature: `sudoku_gui(showIntro, loadPuzzleFile)`
   - `showIntro`: logical, controls whether to show introduction (default: true)
   - `loadPuzzleFile`: string, path to .txt file to load puzzle from (default: '')
 
-- ✅ **Ability to quit at any time** - 1 pt
+- **Ability to quit at any time** - 1 pt
   - Window can be closed at any time using the standard window close button
   - No confirmation dialog - closes immediately
 
-- ✅ **Winner and number of moves/achieved score** - 2 pts
+- **Winner and number of moves/achieved score** - 2 pts
   - Winner detection: When puzzle is completed correctly, displays "WIN! Completed in X moves"
   - Move counter: Tracks and displays number of moves
   - Score tracking: Shows mistakes count (0/5) and game ends after 5 mistakes
@@ -60,24 +60,24 @@ and validation helpers.
 
 ### Aesthetics – 6 points
 
-- ✅ **Foolproofing/error resistance** - 1 pt
+- **Foolproofing/error resistance** - 1 pt
   - Input validation: Only accepts integers 1-9
   - File loading: Validates file existence, format (9x9), and value ranges (0-9)
   - Error handling: Try-catch blocks, null checks, handle validation
   - Invalid input feedback: Status messages guide user
 
-- ✅ **GUI – create a .fig as done in the exercises** - 2 pts
+- **GUI – create a .fig as done in the exercises** - 2 pts
   - GUI created programmatically using `figure` and `uicontrol`
   - Note: To create a .fig file, open the GUI in MATLAB and use File > Save As to save as .fig
   - All GUI elements are properly structured and themed
 
-- ✅ **Code aesthetics** - 1 pt
+- **Code aesthetics** - 1 pt
   - Consistent naming conventions
   - Clear function documentation
   - Organized code structure
   - Readable formatting
 
-- ✅ **Code efficiency** - 1 pt
+- **Code efficiency** - 1 pt
   - Efficient matrix operations
   - Minimal redundant calculations
   - Proper use of logical indexing
@@ -187,18 +187,9 @@ sudoku_gui(false, 'puzzle2.txt')
 - `can_place.m`, `check_complete.m`: Sudoku rule helpers
 
 ### GUI Utilities
-- `read_grid_from_handles.m`, `highlight_cells.m`, `update_status.m`: GUI utilities
+- `read_grid_from_handles.m`, `highlight_cells.m`, `update_status.m`: GUI
 - `apply_theme.m`, `get_active_theme.m`, `toggle_theme_callback.m`: theme management
-- `get_parent_fig.m`: figure handle retrieval
 
 ### Custom Puzzle Files
 - `puzzle1.txt`: Custom Sudoku puzzle #1
 - `puzzle2.txt`: Custom Sudoku puzzle #2
-
-## Creating a .fig File
-
-To create a .fig file as required:
-1. Run `sudoku_gui` in MATLAB
-2. Once the GUI appears, go to File > Save As
-3. Save as `sudoku_gui.fig`
-4. The .fig file will contain the GUI layout
