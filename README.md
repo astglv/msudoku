@@ -24,66 +24,66 @@ and validation helpers.
     - `isfield` - struct field checking
   - Note: Most core functions (`for`, `while`, `if`, `switch`, `zeros`, `ones`, `size`, `numel`, `any`, `all`, `sum`, `sort`, `isequal`, `floor`, `mod`, `num2str`, `str2double`, `sprintf`, `figure`, `uicontrol`, `get`, `set`, `gcf`, `nargin`) are standard and should be in PDFs.
 
-- **Functions, for-loops, while, if, switch used in the form shown in the exercises** - 0 pts
+- **Functions, for-loops, while, if, switch used in the form shown in the exercises**
   - All control structures (`for`, `while`, `if`, `switch`) are used throughout the codebase.
 
-- **Working with matrices and vectors as practiced in the exercises** - 0 pts
+- **Working with matrices and vectors as practiced in the exercises**
   - Extensive matrix operations: indexing, assignment, logical masks, reshaping, etc.
 
-- **Use 3 levels/difficulty tiers** - 2 pts
+- **Use 3 levels/difficulty tiers**
   - Three difficulty levels: Easy (30 blanks), Medium (40 blanks), Hard (50 blanks).
 
-- **Custom map in .txt, at least 2 versions (each student creates one)** - 1 pt
+- **Custom map in .txt, at least 2 versions (each student creates one)**
   - Two custom puzzle files: `puzzle1.txt` and `puzzle2.txt`
   - Load functionality via "Load Puzzle" button or input parameter.
 
-### Code – 6 points
+### Code
 
-- **At the beginning: briefly introduce the game – rules, controls** - 2 pts
+- **At the beginning: briefly introduce the game – rules, controls**
   - Game introduction displayed via `msgbox` when `sudoku_gui()` is called (can be disabled with `sudoku_gui(false)`).
   - Introduction includes: rules, controls, and scoring system.
 
-- **Any input parameters** - 1 pt
+- **Any input parameters**
   - Function signature: `sudoku_gui(showIntro, loadPuzzleFile)`
   - `showIntro`: logical, controls whether to show introduction (default: true)
   - `loadPuzzleFile`: string, path to .txt file to load puzzle from (default: '')
 
-- **Ability to quit at any time** - 1 pt
+- **Ability to quit at any time**
   - Window can be closed at any time using the standard window close button
   - No confirmation dialog - closes immediately
 
-- **Winner and number of moves/achieved score** - 2 pts
+- **Winner and number of moves/achieved score**
   - Winner detection: When puzzle is completed correctly, displays "WIN! Completed in X moves"
   - Move counter: Tracks and displays number of moves
   - Score tracking: Shows mistakes count (0/5) and game ends after 5 mistakes
   - Status bar shows current game state and move count
 
-### Aesthetics – 6 points
+### Aesthetics
 
-- **Foolproofing/error resistance** - 1 pt
+- **Foolproofing/error resistance**
   - Input validation: Only accepts integers 1-9
   - File loading: Validates file existence, format (9x9), and value ranges (0-9)
   - Error handling: Try-catch blocks, null checks, handle validation
   - Invalid input feedback: Status messages guide user
 
-- **GUI – create a .fig as done in the exercises** - 2 pts
+- **GUI – create a .fig as done in the exercises**
   - GUI created programmatically using `figure` and `uicontrol`
   - Note: To create a .fig file, open the GUI in MATLAB and use File > Save As to save as .fig
   - All GUI elements are properly structured and themed
 
-- **Code aesthetics** - 1 pt
+- **Code aesthetics**
   - Consistent naming conventions
   - Clear function documentation
   - Organized code structure
   - Readable formatting
 
-- **Code efficiency** - 1 pt
+- **Code efficiency** 
   - Efficient matrix operations
   - Minimal redundant calculations
   - Proper use of logical indexing
   - Optimized solver algorithm
 
-### Creativity – 5 points (5×1 pt)
+### Creativity
 
 1. **Day/Night Theme System** - Toggle between two complete visual themes
 2. **Custom Puzzle Loading** - Load puzzles from .txt files with file dialog
@@ -113,44 +113,6 @@ and validation helpers.
 8. **Load Puzzle**: Load a custom puzzle from a .txt file
 9. **Theme**: Toggle between Day and Night themes
 10. **Close**: Close the window using the standard window close button
-
-## Description of New Functions
-
-### 1. `load_puzzle_from_file(fig, filename)`
-**Purpose**: Loads a Sudoku puzzle from a .txt file into the game board.
-
-**How it works**:
-- Opens the specified file using `fopen`
-- Reads 9 lines, each containing 9 space-separated digits (0-9)
-- Validates the format (must be 9x9, values 0-9)
-- Populates the GUI cells: 0 = empty (editable), 1-9 = pre-filled (inactive)
-- Attempts to solve the puzzle to store the full solution
-- Updates game state and enables relevant buttons
-
-**What it does in the game**: Allows players to load custom puzzles from text files, enabling puzzle sharing and custom difficulty levels.
-
-### 2. `solve_iterative(grid, maxSteps)`
-**Purpose**: Solves a Sudoku puzzle using iterative backtracking algorithm.
-
-**How it works**:
-- Uses a stack-based approach (instead of recursion)
-- Tries values 1-9 for each empty cell
-- Uses `can_place` to validate each placement
-- Backtracks when no valid value is found
-- Returns the solved grid and success status
-- Counts steps for performance monitoring
-
-**What it does in the game**: Provides the "Solve" button functionality, automatically completing puzzles when players need help or want to see the solution.
-
-## Usage
-
-1. In MATLAB, run `sudoku_gui` from the project folder.
-2. Use *New* buttons to create a puzzle, or type numbers manually.
-3. Click *Check* to validate current entries; conflicts turn light red.
-4. Click *Solve* to auto-complete the puzzle (current inputs must be valid).
-5. Use *Clear* to reset the board.
-6. Use *Load Puzzle* to load custom puzzles from .txt files.
-7. Close the window using the standard window close button to exit.
 
 ### Example Usage with Parameters:
 ```matlab
