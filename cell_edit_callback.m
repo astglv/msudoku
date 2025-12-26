@@ -1,35 +1,22 @@
-function cell_edit_callback(hCell)
-s = strtrim(get(hCell,'String'));
+function cell_edit_callback(hCell, ~)
+% CELL_EDIT_CALLBACK Spracovanie manuálneho zadania čísla do bunky
 fig = gcf;
-
-gameActive = getappdata(fig,'gameActive');
+s = strtrim(get(hCell, 'String'));
 
 if isempty(s)
-    set(hCell,'String','');
+    update_status(fig, 'Bunka vymazaná');
     return;
 end
 
-v = str2double(s);
-if isnan(v) || v < 1 || v > 9 || floor(v)~=v
-    set(hCell,'String','');
-    update_status(fig,'Status: enter an integer from 1 to 9');
-    return;
+val = str2double(s);
+if isnan(val) || val < 1 || val > 9 || val ~= floor(val)
+    set(hCell, 'String', '');
+    update_status(fig, 'Chyba: Zadajte celé číslo 1-9');
+else
+    m = getappdata(fig, 'moves') + 1;
+    setappdata(fig, 'moves', m);
+    mh = getappdata(fig, 'movesHandle');
+    if ishandle(mh), set(mh, 'String', sprintf('Moves: %d', m)); end
+    update_status(fig, sprintf('Zadané číslo %d', val));
 end
-
-set(hCell,'String',num2str(v));
-
-if isempty(gameActive) || ~gameActive
-    return;
-end
-
-moves = getappdata(fig,'moves');
-moves = moves + 1;
-setappdata(fig,'moves',moves);
-
-movesHandle = getappdata(fig,'movesHandle');
-if ~isempty(movesHandle) && ishandle(movesHandle)
-    set(movesHandle,'String',sprintf('Moves: %d',moves));
-end
-
-update_status(fig,sprintf('Status: move %d (entered %d)',moves,v));
 end

@@ -1,25 +1,15 @@
 function sudoku_gui(showIntro, loadPuzzleFile)
-% SUDOKU_GUI  Initializes the Sudoku GUI layout and shared state.
-%
-% Input parameters:
-%   showIntro - (optional) logical, if true shows game introduction (default: true)
-%   loadPuzzleFile - (optional) string, path to .txt file to load puzzle from (default: '')
+% SUDOKU_GUI Hlavné okno hry Sudoku
+if nargin < 1, showIntro = true; end
+if nargin < 2, loadPuzzleFile = ''; end
 
-% Default input parameters
-% nargin - returns the number of function input arguments
-% given in the call to the currently executing function
-if nargin < 1
-    showIntro = true;
-end
-if nargin < 2
-    loadPuzzleFile = '';
-end
-
-% Game introduction at the beginning
-
-hFig = figure('Name','Sudoku','NumberTitle','off',...
+% Nastavenie okna s priamym definovaním farby pozadia
+hFig = figure('Name','Sudoku Premium','NumberTitle','off',...
               'Position',[200 100 660 620],...
-              'MenuBar','none','Resize','off');
+              'MenuBar','none','Resize','off',...
+              'Color',[0.97 0.97 0.98]);
+
+% Zobrazenie pôvodných pravidiel
 if showIntro
     introText = {
         '                  === SUDOKU GAME ===';
@@ -35,141 +25,55 @@ if showIntro
         '- New (Easy/Medium/Hard): Generate a new puzzle';
         '- Check: Validate your entries and find conflicts';
         '- Solve: Auto-complete the puzzle';
-        '- Clear Entries: Remove only your entered digits';
-        '- Clear All: Reset the entire board';
-        ' ';
-        'SCORING:';
-        '- Moves: Number of moves you made';
-        '- Mistakes: You lose after 5 mistakes';
-        '- Win: Complete the puzzle correctly!'
-    };
-
-    msgbox(introText, 'Welcome to Sudoku', 'help');
+        '- Clear All: Reset the entire board'};
+    msgbox(introText, 'Welcome', 'help');
 end
 
-
-style = build_style();
-
-cellSize = 45;
-gap = 2;
-blockGap = 10;
-startX = 20;
-startY = 580;
-
-% matrix 9x9
+% Vytvorenie hracej plochy 9x9
 cellHandles = zeros(9);
 for r = 1:9
     for c = 1:9
-        % floor((c-1)/3) / floor((r-1)/3) -
-        % в каком 3x3 блоке (от 0 до 2) находится текущая ячейка
-        % addX и addY дополнительное смещение к координатам,
-        % чтобы создать толстые линии (пробелы) между блоками 3x3
-        addX = floor((c-1)/3)*blockGap;
-        addY = floor((r-1)/3)*blockGap;
-
-        x = startX + (c-1)*(cellSize+gap) + addX;
-        y = startY - (r)*(cellSize+gap) - addY;
-
+        addX = floor((c-1)/3)*10; addY = floor((r-1)/3)*10;
         cellHandles(r,c) = uicontrol('Style','edit','String','',...
-            'Position',[x y cellSize cellSize],...
-            'FontSize',style.cellFontSize,'FontName',style.fontName,...
+            'Position',[20+(c-1)*47+addX, 580-r*47-addY, 45, 45],...
+            'FontSize',18,'FontName','Arial Bold',...
             'HorizontalAlignment','center',...
-            % tag  - Присваивает ячейке уникальный идентификатор
-            %(например, 'cell_1_1' для верхнего левого угла)
-            'Tag',sprintf('cell_%d_%d',r,c),...
-            'BackgroundColor',style.themes.day.cellBg,...
-            'Callback',@(src,~)cell_edit_callback(src));
+            'BackgroundColor',[1 1 1],...
+            'Callback',@cell_edit_callback);
     end
 end
 
-btnX = 500;
-btnW = 140;
-btnH = 35;
+% Tlačidlá (Priame priradenie callbackov na samostatné súbory)
+uicontrol('Style','pushbutton','String','New (Easy)','Position',[500 520 140 35],...
+    'Callback',@(s,e)generate_button_callback(s,'easy'));
+uicontrol('Style','pushbutton','String','New (Medium)','Position',[500 475 140 35],...
+    'Callback',@(s,e)generate_button_callback(s,'medium'));
+uicontrol('Style','pushbutton','String','New (Hard)','Position',[500 430 140 35],...
+    'Callback',@(s,e)generate_button_callback(s,'hard'));
 
-buttonHandles = zeros(1,8);
-buttonHandles(1) = makeButton(btnX, 520, btnW, btnH, 'New (Easy)',...
-    @(src,evt)generate_button_callback(src,'easy'));
-buttonHandles(2) = makeButton(btnX, 475, btnW, btnH, 'New (Medium)',...
-    @(src,evt)generate_button_callback(src,'medium'));
-buttonHandles(3) = makeButton(btnX, 430, btnW, btnH, 'New (Hard)',...
-    @(src,evt)generate_button_callback(src,'hard'));
-buttonHandles(4) = makeButton(btnX, 360, btnW, btnH, 'Solve',...
-    @solve_button_callback);
-buttonHandles(5) = makeButton(btnX, 315, btnW, btnH, 'Check',...
-    @check_button_callback);
-buttonHandles(6) = makeButton(btnX, 270, btnW, btnH, 'Clear Entries',...
-    @clear_entries_callback);
-buttonHandles(7) = makeButton(btnX, 225, btnW, btnH, 'Clear All',...
-    @clear_button_callback);
-buttonHandles(8) = makeButton(btnX, 180, btnW, btnH, 'Load Puzzle',...
-    @load_puzzle_callback);
+uicontrol('Style','pushbutton','String','Solve','Position',[500 360 140 35],...
+    'Callback',@solve_button_callback);
+uicontrol('Style','pushbutton','String','Check','Position',[500 315 140 35],...
+    'Callback',@check_button_callback);
+uicontrol('Style','pushbutton','String','Clear All','Position',[500 225 140 35],...
+    'Callback',@clear_button_callback);
 
-statusHandle = uicontrol('Style','text','String','Status: ready',...
-    'Position',[20 20 610 30],...
-    'Tag','status_box','HorizontalAlignment','left',...
-    'FontSize',style.statusFontSize,'FontName',style.fontName);
+% Status panely
+statusH = uicontrol('Style','text','String','Status: ready','Position',[20 20 610 30],...
+    'HorizontalAlignment','left','Tag','status_box','FontSize', 11,'BackgroundColor',[0.97 0.97 0.98]);
+movesH = uicontrol('Style','text','String','Moves: 0','Position',[20 55 200 30],...
+    'HorizontalAlignment','left','FontSize', 11,'BackgroundColor',[0.97 0.97 0.98]);
+mistakesH = uicontrol('Style','text','String','Mistakes: 0/5','Position',[240 55 200 30],...
+    'HorizontalAlignment','left','FontSize', 11,'BackgroundColor',[0.97 0.97 0.98]);
 
-movesHandle = uicontrol('Style','text','String','Moves: 0',...
-    'Position',[20 55 200 30],...
-    'Tag','moves_box','HorizontalAlignment','left',...
-    'FontSize',style.statusFontSize,'FontName',style.fontName);
-
-mistakesHandle = uicontrol('Style','text','String','Mistakes: 0/5',...
-    'Position',[240 55 200 30],...
-    'Tag','mistakes_box','HorizontalAlignment','left',...
-    'FontSize',style.statusFontSize,'FontName',style.fontName);
-
+% Uloženie dát do objektu okna
 setappdata(hFig,'cellHandles',cellHandles);
-setappdata(hFig,'buttonHandles',buttonHandles);
-setappdata(hFig,'statusHandle',statusHandle);
-setappdata(hFig,'finalElapsed',0);
-setappdata(hFig,'isOctave',exist('OCTAVE_VERSION','builtin')~=0);
-setappdata(hFig,'movesHandle',movesHandle);
-setappdata(hFig,'mistakesHandle',mistakesHandle);
-setappdata(hFig,'fullGrid',zeros(9));
-setappdata(hFig,'puzzle',zeros(9));
+setappdata(hFig,'statusHandle',statusH);
+setappdata(hFig,'movesHandle',movesH);
+setappdata(hFig,'mistakesHandle',mistakesH);
 setappdata(hFig,'moves',0);
 setappdata(hFig,'mistakes',0);
-setappdata(hFig,'gameActive',false);
-setappdata(hFig,'style',style);
-setappdata(hFig,'currentTheme','day');
-setappdata(hFig,'loadPuzzleFile',loadPuzzleFile);
 
+% Prvotné nastavenie vizuálu
 apply_theme(hFig);
-
-% Load puzzle from file if provided
-if ~isempty(loadPuzzleFile)
-    load_puzzle_from_file(hFig, loadPuzzleFile);
-end
-
-    function hBtn = makeButton(x,y,w,h,label,cb)
-        hBtn = uicontrol('Style','pushbutton','String',label,...
-            'Position',[x y w h],...
-            'FontName',style.fontName,...
-            'FontSize',style.buttonFontSize,...
-            'Callback',cb);
-    end
-
-    function s = build_style()
-        s = struct();
-        s.fontName = 'Arial Rounded MT Bold';
-        s.cellFontSize = 18;
-        s.buttonFontSize = 12;
-        s.statusFontSize = 12;
-        s.themeOrder = {'day'};
-        s.themes.day = struct(...
-            'name','day',...
-            'displayName','Day',...
-            'figureBg',[0.97 0.97 0.98],...
-            'cellBg',[1 1 1],...
-            'cellText',[0.1 0.1 0.1],...
-            'prefillBg',[0.92 0.95 1],...
-            'prefillText',[0 0.2 0.6],...
-            'buttonBg',[0.88 0.92 0.98],...
-            'buttonText',[0.1 0.1 0.1],...
-            'statusBg',[0.9 0.93 0.98],...
-            'statusText',[0.05 0.05 0.05],...
-            'highlight',[1 0.7 0.7],...
-            'correctHighlight',[0.7 1 0.7]);
-    end
 end

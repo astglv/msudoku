@@ -1,73 +1,11 @@
 function apply_theme(fig)
-% APPLY_THEME  Applies the active theme colors and fonts to the GUI.
-if nargin < 1 || isempty(fig) || ~ishandle(fig)
-    fig = gcf;
-end
-
-style = getappdata(fig,'style');
-if isempty(style) || ~isfield(style,'themes')
-    return;
-end
-
-theme = get_active_theme(fig);
-if isempty(theme)
-    return;
-end
-
-set(fig,'Color',theme.figureBg);
-
-cellHandles = getappdata(fig,'cellHandles');
-for idx = 1:numel(cellHandles)
-    h = cellHandles(idx);
-    if ~ishandle(h)
-        continue;
-    end
-    if strcmpi(get(h,'Enable'),'inactive')
-        bg = theme.prefillBg;
-        fg = theme.prefillText;
+% APPLY_THEME Nastaví farby buniek podľa ich stavu (fixné hodnoty)
+h = getappdata(fig, 'cellHandles');
+for i = 1:81
+    if strcmpi(get(h(i), 'Enable'), 'inactive')
+        set(h(i), 'BackgroundColor', [0.92 0.95 1], 'ForegroundColor', [0 0.2 0.6]);
     else
-        bg = theme.cellBg;
-        fg = theme.cellText;
+        set(h(i), 'BackgroundColor', [1 1 1], 'ForegroundColor', [0.1 0.1 0.1]);
     end
-    set(h,'BackgroundColor',bg,...
-        'ForegroundColor',fg,...
-        'FontName',style.fontName,...
-        'FontSize',style.cellFontSize);
-end
-
-buttonHandles = getappdata(fig,'buttonHandles');
-for idx = 1:numel(buttonHandles)
-    h = buttonHandles(idx);
-    if ~ishandle(h)
-        continue;
-    end
-    set(h,'BackgroundColor',theme.buttonBg,...
-        'ForegroundColor',theme.buttonText,...
-        'FontName',style.fontName,...
-        'FontSize',style.buttonFontSize);
-end
-
-statusHandle = getappdata(fig,'statusHandle');
-if ~isempty(statusHandle) && ishandle(statusHandle)
-    set(statusHandle,'BackgroundColor',theme.statusBg,...
-        'ForegroundColor',theme.statusText,...
-        'FontName',style.fontName,...
-        'FontSize',style.statusFontSize);
-end
-
-movesHandle = getappdata(fig,'movesHandle');
-if ~isempty(movesHandle) && ishandle(movesHandle)
-    set(movesHandle,'BackgroundColor',theme.statusBg,...
-        'ForegroundColor',theme.statusText,...
-        'FontName',style.fontName,...
-        'FontSize',style.statusFontSize);
-end
-
-mistakesHandle = getappdata(fig,'mistakesHandle');
-if ~isempty(mistakesHandle) && ishandle(mistakesHandle)
-    set(mistakesHandle,'BackgroundColor',theme.statusBg,...
-        'ForegroundColor',theme.statusText,...
-        'FontName',style.fontName,...
-        'FontSize',style.statusFontSize);
 end
 end

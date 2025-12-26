@@ -1,31 +1,16 @@
 function ok = can_place(G, r, c, val)
-
-%'ok' tells the game if a specific move is allowed by the rules of Sudoku.
-%The function checks rows, columns, and 3x3 blocks.
-%True (1): No conflicts found
-%False (0): A conflict exists
-
+% CAN_PLACE Kontrola, či je možné umiestniť číslo na danú pozíciu
+% Kontroluje riadok, stĺpec a príslušný 3x3 štvorec.
 ok = true;
-if val < 1 || val > 9
-    ok = false; return;
-end
-for j = 1:9
-    if G(r,j) == val
-        ok = false; return;
-    end
-end
-for i = 1:9
-    if G(i,c) == val
-        ok = false; return;
-    end
-end
+if val < 1 || val > 9, ok = false; return; end
+
+% Kontrola riadku a stĺpca
+if any(G(r,:) == val), ok = false; return; end
+if any(G(:,c) == val), ok = false; return; end
+
+% Kontrola 3x3 bloku
 r0 = floor((r-1)/3)*3 + 1;
 c0 = floor((c-1)/3)*3 + 1;
-for i = r0:(r0+2)
-    for j = c0:(c0+2)
-        if G(i,j) == val
-            ok = false; return;
-        end
-    end
-end
+block = G(r0:r0+2, c0:c0+2);
+if any(block(:) == val), ok = false; return; end
 end

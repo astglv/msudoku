@@ -1,16 +1,7 @@
-function update_status(fig, message)
-% UPDATE_STATUS  Safely updates the status text in the GUI.
-if nargin < 1 || isempty(fig) || ~ishandle(fig)
-    fig = gcf;
+function update_status(fig, msg)
+% UPDATE_STATUS Aktualizuje text v stavovom riadku
+sb = findobj(fig, 'Tag', 'status_box');
+if ~isempty(sb)
+    set(sb, 'String', ['Status: ', msg]);
 end
-
-statusBox = findobj(fig,'Tag','status_box');
-if isempty(statusBox) || ~ishandle(statusBox)
-    warning('Status box not found.');
-    return;
 end
-
-set(statusBox,'String',message);
-end
-
-
