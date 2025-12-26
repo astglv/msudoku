@@ -36,5 +36,3 @@ for k = 1:3
 end
 G = G(:,colOrder);
 end
-
-

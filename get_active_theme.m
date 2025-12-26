@@ -10,18 +10,13 @@ if isempty(style) || ~isfield(style,'themes')
     return;
 end
 
-themeName = getappdata(fig,'currentTheme');
-if isempty(themeName) || ~isfield(style.themes,themeName)
-    if isfield(style,'themeOrder') && ~isempty(style.themeOrder)
-        themeName = style.themeOrder{1};
-    else
-        names = fieldnames(style.themes);
-        themeName = names{1};
-    end
-    setappdata(fig,'currentTheme',themeName);
+% Поскольку тема теперь только одна, всегда берем первую из списка
+if isfield(style,'themeOrder') && ~isempty(style.themeOrder)
+    themeName = style.themeOrder{1};
+else
+    names = fieldnames(style.themes);
+    themeName = names{1};
 end
 
 theme = style.themes.(themeName);
 end
-
-

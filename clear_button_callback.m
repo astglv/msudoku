@@ -43,4 +43,3 @@ if ~isempty(buttonHandles)
         set(buttonHandles(checkButtonIndex), 'Enable', 'on');
     end
 end
-

@@ -29,4 +29,3 @@ for i = r0:(r0+2)
     end
 end
 end
-

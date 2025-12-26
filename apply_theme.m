@@ -70,15 +70,4 @@ if ~isempty(mistakesHandle) && ishandle(mistakesHandle)
         'FontName',style.fontName,...
         'FontSize',style.statusFontSize);
 end
-
-update_theme_button(fig,theme);
-end
-
-function update_theme_button(fig,theme)
-btn = getappdata(fig,'themeButton');
-if isempty(btn) || ~ishandle(btn)
-    return;
-end
-label = sprintf('Theme: %s',theme.displayName);
-set(btn,'String',label);
 end
