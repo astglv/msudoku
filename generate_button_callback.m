@@ -1,6 +1,7 @@
 function generate_button_callback(src, level)
 fig = gcf;
-fullG = generate_full();
+cellHandles = getappdata(fig, 'cellHandles');
+if isempty(cellHandles), return; end
 
 switch lower(level)
     case 'easy'
@@ -13,8 +14,8 @@ switch lower(level)
         blanks = 40;
 end
 
+fullG = generate_full();
 puz = make_puzzle(fullG, blanks);
-cellHandles = getappdata(fig,'cellHandles');
 
 if isempty(cellHandles)
     return;
@@ -24,16 +25,12 @@ for r = 1:9
     for c = 1:9
         h = cellHandles(r,c);
         if puz(r,c) == 0
-            set(h,'String','',...
-                'Enable','on');
+            set(h,'String','','Enable','on');
         else
-            set(h,'String',num2str(puz(r,c)),...
-                'Enable','inactive');
+            set(h,'String',num2str(puz(r,c)), 'Enable','inactive');
         end
     end
 end
-
-apply_theme(fig);
 
 setappdata(fig,'fullGrid',fullG);
 setappdata(fig,'puzzle',puz);
@@ -41,17 +38,16 @@ setappdata(fig,'moves',0);
 setappdata(fig,'mistakes',0);
 setappdata(fig,'gameActive',true);
 update_status(fig,sprintf('Status: new %s puzzle, blanks=%d',level,blanks));
+
+apply_theme(fig);
+
 buttonHandles = getappdata(fig,'buttonHandles');
-
 if ~isempty(buttonHandles)
-
+    % Indices: 5 = Check, 6 = Clear Entries
     checkButtonIndex = 5;
     clearEntriesButtonIndex = 6;
+    set(buttonHandles(5), 'Enable', 'on');
+    set(buttonHandles(6), 'Enable', 'on');
+end
 
-    if numel(buttonHandles) >= clearEntriesButtonIndex && ishandle(buttonHandles(clearEntriesButtonIndex))
-        set(buttonHandles(clearEntriesButtonIndex), 'Enable', 'on');
-    end
-    if numel(buttonHandles) >= checkButtonIndex && ishandle(buttonHandles(checkButtonIndex))
-        set(buttonHandles(checkButtonIndex), 'Enable', 'on');
-    end
 end

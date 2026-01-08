@@ -12,10 +12,10 @@ if blanks == 0
     return;
 end
 
-%It treats the 9x9 grid as a single list of 81 numbers.
-%randperm(81, blanks) picks blanks unique numbers between 1 and 81 randomly.
+% Pick blanks unique numbers between 1 and 81 randomly.
 indices = randperm(81, blanks);
 P(indices) = 0;
+
 end
 
 
