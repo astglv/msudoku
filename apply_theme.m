@@ -1,84 +1,53 @@
 function apply_theme(fig)
-% APPLY_THEME  Applies the active theme colors and fonts to the GUI.
-if nargin < 1 || isempty(fig) || ~ishandle(fig)
+% APPLY_THEME updates UI to match the selected visual style.
+
+if nargin == 0 || isempty(fig) || ~ishandle(fig)
     fig = gcf;
 end
 
-style = getappdata(fig,'style');
-if isempty(style) || ~isfield(style,'themes')
-    return;
-end
+style = getappdata(fig, 'style');
 
-theme = get_active_theme(fig);
-if isempty(theme)
-    return;
-end
+% paint the background
+set(fig, 'Color', style.figureBg);
 
-set(fig,'Color',theme.figureBg);
-
-cellHandles = getappdata(fig,'cellHandles');
-for idx = 1:numel(cellHandles)
-    h = cellHandles(idx);
-    if ~ishandle(h)
-        continue;
+% paint the cells
+cellHandles = getappdata(fig, 'cellHandles');
+for i = 1:numel(cellHandles)
+    h = cellHandles(i);
+    if ishandle(h)
+        % paint the preset numbers
+        if strcmp(get(h, 'Enable'), 'inactive')
+            bg = style.prefillBg;
+            fg = style.prefillText;
+        else
+            bg = style.cellBg;
+            fg = style.cellText;
+        end
+        set(h, 'BackgroundColor', bg, 'ForegroundColor', fg, ...
+               'FontName', style.fontName, 'FontSize', style.cellFontSize);
     end
-    if strcmpi(get(h,'Enable'),'inactive')
-        bg = theme.prefillBg;
-        fg = theme.prefillText;
-    else
-        bg = theme.cellBg;
-        fg = theme.cellText;
+end
+
+% paint the buttons
+buttonHandles = getappdata(fig, 'buttonHandles');
+for i = 1:numel(buttonHandles)
+    h = buttonHandles(i);
+    if ishandle(h)
+        set(h, 'BackgroundColor', style.buttonBg, 'ForegroundColor', style.buttonText, ...
+               'FontName', style.fontName, 'FontSize', style.buttonFontSize);
     end
-    set(h,'BackgroundColor',bg,...
-        'ForegroundColor',fg,...
-        'FontName',style.fontName,...
-        'FontSize',style.cellFontSize);
 end
 
-buttonHandles = getappdata(fig,'buttonHandles');
-for idx = 1:numel(buttonHandles)
-    h = buttonHandles(idx);
-    if ~ishandle(h)
-        continue;
+% paint the text cells
+handlesToUpdate = [getappdata(fig, 'statusHandle'), ...
+                   getappdata(fig, 'movesHandle'), ...
+                   getappdata(fig, 'mistakesHandle')];
+
+for h = handlesToUpdate
+    if ~isempty(h) && ishandle(h)
+        set(h, 'BackgroundColor', style.statusBg, 'ForegroundColor', style.statusText, ...
+               'FontName', style.fontName, 'FontSize', style.statusFontSize);
     end
-    set(h,'BackgroundColor',theme.buttonBg,...
-        'ForegroundColor',theme.buttonText,...
-        'FontName',style.fontName,...
-        'FontSize',style.buttonFontSize);
 end
 
-statusHandle = getappdata(fig,'statusHandle');
-if ~isempty(statusHandle) && ishandle(statusHandle)
-    set(statusHandle,'BackgroundColor',theme.statusBg,...
-        'ForegroundColor',theme.statusText,...
-        'FontName',style.fontName,...
-        'FontSize',style.statusFontSize);
-end
-
-movesHandle = getappdata(fig,'movesHandle');
-if ~isempty(movesHandle) && ishandle(movesHandle)
-    set(movesHandle,'BackgroundColor',theme.statusBg,...
-        'ForegroundColor',theme.statusText,...
-        'FontName',style.fontName,...
-        'FontSize',style.statusFontSize);
-end
-
-mistakesHandle = getappdata(fig,'mistakesHandle');
-if ~isempty(mistakesHandle) && ishandle(mistakesHandle)
-    set(mistakesHandle,'BackgroundColor',theme.statusBg,...
-        'ForegroundColor',theme.statusText,...
-        'FontName',style.fontName,...
-        'FontSize',style.statusFontSize);
-end
-
-update_theme_button(fig,theme);
-end
-
-function update_theme_button(fig,theme)
-btn = getappdata(fig,'themeButton');
-if isempty(btn) || ~ishandle(btn)
-    return;
-end
-label = sprintf('Theme: %s',theme.displayName);
-set(btn,'String',label);
 end

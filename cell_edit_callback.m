@@ -1,8 +1,8 @@
-function cell_edit_callback(hCell)
+function cell_edit_callback(hCell, ~)
+% CELL_EDIT_CALLBACK processes manual user input, validates digits, and updates the move counter.
+
 s = strtrim(get(hCell,'String'));
 fig = gcf;
-
-gameActive = getappdata(fig,'gameActive');
 
 if isempty(s)
     set(hCell,'String','');
@@ -18,6 +18,7 @@ end
 
 set(hCell,'String',num2str(v));
 
+gameActive = getappdata(fig,'gameActive');
 if isempty(gameActive) || ~gameActive
     return;
 end
@@ -26,10 +27,10 @@ moves = getappdata(fig,'moves');
 moves = moves + 1;
 setappdata(fig,'moves',moves);
 
-movesHandle = getappdata(fig,'movesHandle');
-if ~isempty(movesHandle) && ishandle(movesHandle)
-    set(movesHandle,'String',sprintf('Moves: %d',moves));
+mh = getappdata(fig,'movesHandle');
+if ~isempty(mh) && ishandle(mh)
+    set(mh,'String',sprintf('Moves: %d',moves));
 end
-
 update_status(fig,sprintf('Status: move %d (entered %d)',moves,v));
+
 end
