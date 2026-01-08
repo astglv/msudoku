@@ -1,13 +1,13 @@
 function sudoku_gui(showIntro, loadPuzzleFile)
-% SUDOKU_GUI  Initializes the Sudoku GUI layout.
-
+% SUDOKU_GUI  initializes the Sudoku GUI layout.
+%
 % Input parameters:
 %   showIntro - (optional) logical, if true shows game introduction (default: true)
 %   loadPuzzleFile - (optional) string, path to .txt file to load puzzle from (default: '')
 if nargin < 1, showIntro = true; end
 if nargin < 2, loadPuzzleFile = ''; end
 
-% Style setup
+% style setup
 style.fontName = 'Arial Rounded MT Bold';
 style.cellFontSize = 18;
 style.buttonFontSize = 12;
@@ -25,7 +25,7 @@ style.statusText = [0.05 0.05 0.05];
 style.highlight = [1 0.7 0.7];
 style.correctHighlight = [0.7 1 0.7];
 
-% Game introduction at the beginning
+% game introduction at the beginning
 hFig = figure('Name','Sudoku','NumberTitle','off',...
               'Position',[200 100 660 620],...
               'MenuBar','none','Resize','off');
@@ -79,7 +79,7 @@ for r = 1:9
 end
 
 btnX = 500; btnW = 140; btnH = 35;
-buttonHandles = []; % Initialize array to store button handles
+buttonHandles = []; % store button handles
 
 buttonHandles(1) = uicontrol('Style','pushbutton','String','New (Easy)','Position',[btnX, 520, btnW, btnH],...
     'Callback',@(src,evt)generate_button_callback(src,'easy'));
@@ -98,19 +98,17 @@ buttonHandles(7) = uicontrol('Style','pushbutton','String','Clear All','Position
 buttonHandles(8) = uicontrol('Style','pushbutton','String','Load Puzzle','Position',[btnX, 180, btnW, btnH],...
     'Callback',@load_puzzle_callback);
 
-% Apply button styles
+% apply button styles
 set(buttonHandles, 'BackgroundColor', style.buttonBg, 'ForegroundColor', style.buttonText);
 
 statusHandle = uicontrol('Style','text','String','Status: ready',...
     'Position',[20 20 610 30],...
     'Tag','status_box','HorizontalAlignment','left',...
     'FontSize',style.statusFontSize,'FontName',style.fontName);
-
 movesHandle = uicontrol('Style','text','String','Moves: 0',...
     'Position',[20 55 200 30],...
     'Tag','moves_box','HorizontalAlignment','left',...
     'FontSize',style.statusFontSize,'FontName',style.fontName);
-
 mistakesHandle = uicontrol('Style','text','String','Mistakes: 0/5',...
     'Position',[240 55 200 30],...
     'Tag','mistakes_box','HorizontalAlignment','left',...
@@ -132,7 +130,7 @@ setappdata(hFig,'loadPuzzleFile',loadPuzzleFile);
 
 apply_theme(hFig);
 
-% Load puzzle from file if provided
+% load puzzle from file if provided
 if ~isempty(loadPuzzleFile)
     load_puzzle_from_file(hFig, loadPuzzleFile);
 end

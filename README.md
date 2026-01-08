@@ -1,41 +1,30 @@
 # msudoku
 
-Small MATLAB app that provides a Sudoku GUI with puzzle generation, solving,
+MATLAB app that provides a Sudoku GUI with puzzle generation, solving,
 and validation helpers.
 
 ## Project Requirements Checklist
 
-### Required Conditions (5 points)
+### Required Conditions
 
-- **Game board (playing area) stored in a matrix** - 2 pts
+- **Game board (playing area) stored in a matrix**
   - The 9x9 Sudoku grid is stored in matrices (`puzzle`, `fullGrid`) and displayed using `uicontrol` edit boxes.
 
-- **Use exactly 2–3 commands that are not mentioned in any PDF** - 0 pts
-  - Functions potentially not in PDFs (need verification):
-    - `setappdata` / `getappdata` - GUI data storage
-    - `movegui` - GUI positioning
-    - `uigetfile` - file dialog
-    - `msgbox` - message box
-    - `fopen`, `fgetl`, `fclose`, `feof`, `sscanf` - file I/O operations
-    - `randperm` - random permutation
-    - `reshape` - matrix reshaping
-    - `ishandle` - GUI handle checking
-    - `strcmpi` - case-insensitive string comparison
-    - `isfield` - struct field checking
-  - Note: Most core functions (`for`, `while`, `if`, `switch`, `zeros`, `ones`, `size`, `numel`, `any`, `all`, `sum`, `sort`, `isequal`, `floor`, `mod`, `num2str`, `str2double`, `sprintf`, `figure`, `uicontrol`, `get`, `set`, `gcf`, `nargin`) are standard and should be in PDFs.
+- **Use exactly 2–3 commands that are not mentioned in any PDF**
+    - `uigetfile` - open file selection dialog box
+    - `feof` - test for end of file
+    - `randperm` - random permutation of integers
 
 - **Functions, for-loops, while, if, switch used in the form shown in the exercises**
-  - All control structures (`for`, `while`, `if`, `switch`) are used throughout the codebase.
-
+- 
 - **Working with matrices and vectors as practiced in the exercises**
-  - Extensive matrix operations: indexing, assignment, logical masks, reshaping, etc.
 
 - **Use 3 levels/difficulty tiers**
   - Three difficulty levels: Easy (30 blanks), Medium (40 blanks), Hard (50 blanks).
 
-- **Custom map in .txt, at least 2 versions (each student creates one)**
+- **Custom map in .txt, at least 2 versions**
   - Two custom puzzle files: `puzzle1.txt` and `puzzle2.txt`
-  - Load functionality via "Load Puzzle" button or input parameter.
+  - Load functionality via the "Load Puzzle" button or input parameter.
 
 ### Code
 
@@ -44,55 +33,47 @@ and validation helpers.
   - Introduction includes: rules, controls, and scoring system.
 
 - **Any input parameters**
-  - Function signature: `sudoku_gui(showIntro, loadPuzzleFile)`
-  - `showIntro`: logical, controls whether to show introduction (default: true)
+  - Function: `sudoku_gui(showIntro, loadPuzzleFile)`
+  - `showIntro`: logical, controls whether to show an introduction (default: true)
   - `loadPuzzleFile`: string, path to .txt file to load puzzle from (default: '')
 
 - **Ability to quit at any time**
-  - Window can be closed at any time using the standard window close button
-  - No confirmation dialog - closes immediately
+  - Window can be closed at any time using the standard window close button.
 
 - **Winner and number of moves/achieved score**
-  - Winner detection: When puzzle is completed correctly, displays "WIN! Completed in X moves"
-  - Move counter: Tracks and displays number of moves
-  - Score tracking: Shows mistakes count (0/5) and game ends after 5 mistakes
-  - Status bar shows current game state and move count
+  - Winner detection: When the puzzle is completed correctly, displays "WIN! Completed in X moves"
+  - Move counter: Tracks and displays the number of moves
+  - Score tracking: Shows mistakes count (0/5) and the game ends after five mistakes
+  - The status bar shows the current game state and move count
 
 ### Aesthetics
 
-- **Foolproofing/error resistance**
+- **Error resistance**
   - Input validation: Only accepts integers 1-9
   - File loading: Validates file existence, format (9x9), and value ranges (0-9)
   - Error handling: Try-catch blocks, null checks, handle validation
   - Invalid input feedback: Status messages guide user
 
-- **GUI – create a .fig as done in the exercises**
-  - GUI created programmatically using `figure` and `uicontrol`
-  - Note: To create a .fig file, open the GUI in MATLAB and use File > Save As to save as .fig
-  - All GUI elements are properly structured and themed
+- **GUI – Programmatic Creation (Octave Compatible)**
+  - Instead of a static .fig file, the GUI is generated dynamically using the `figure` command.
+  - **Handle Management**: Uses `gcf` (Get Current Figure) to identify the active window during callbacks.
+  - **Data Persistence**: Uses `setappdata` and `getappdata` to share the Sudoku matrix and move counters between separate .m files.
+  - **Uicontrols**: All 81 grid cells and game buttons are created as handles, allowing for real-time color and text updates.
 
 - **Code aesthetics**
-  - Consistent naming conventions
-  - Clear function documentation
-  - Organized code structure
-  - Readable formatting
 
 - **Code efficiency** 
-  - Efficient matrix operations
-  - Minimal redundant calculations
-  - Proper use of logical indexing
-  - Optimized solver algorithm
+
 
 ### Creativity
 
-1. **Day/Night Theme System** - Toggle between two complete visual themes
-2. **Custom Puzzle Loading** - Load puzzles from .txt files with file dialog
-3. **Mistake Limit System** - Game ends after 5 mistakes with visual feedback
-4. **Conflict Highlighting** - Visual highlighting of conflicts in red
-5. **Move Counter** - Real-time tracking and display of moves
-6. **Clear Entries vs Clear All** - Two-level clearing system
-7. **Auto-solver** - Backtracking algorithm to solve puzzles
-8. **Status Bar** - Comprehensive status messages throughout gameplay
+1. **Custom Puzzle Loading** - Load puzzles from .txt files with file dialog
+2. **Mistake Limit System** - Game ends after five mistakes with visual feedback
+3. **Conflict Highlighting** - Visual highlighting of conflicts in red
+4. **Move Counter** - Real-time tracking and display of moves
+5. **Clear Entries vs Clear All** - Two-level clearing system
+6. **Auto-solver** - Backtracking algorithm to solve puzzles
+7. **Status Bar** - Comprehensive status messages throughout gameplay
 
 ## Game Rules
 
@@ -111,8 +92,7 @@ and validation helpers.
 6. **Clear Entries**: Remove only your entered digits (keeps original puzzle)
 7. **Clear All**: Reset the entire board
 8. **Load Puzzle**: Load a custom puzzle from a .txt file
-9. **Theme**: Toggle between Day and Night themes
-10. **Close**: Close the window using the standard window close button
+9. **Close**: Close the window using the standard window close button
 
 ### Example Usage with Parameters:
 ```matlab
@@ -143,14 +123,17 @@ sudoku_gui(false, 'puzzle2.txt')
 - `load_puzzle_from_file.m`: loads puzzle from .txt file
 
 ### Game Logic
-- `generate_full.m`: random full solution generator
-- `make_puzzle.m`: removes clues from a full grid
-- `solve_iterative.m`: iterative backtracking solver
-- `can_place.m`, `check_complete.m`: Sudoku rule helpers
+- `generate_full.m`: random full solution generator.
+- `make_puzzle.m`: removes clues from a full grid.
+- `solve_iterative.m`: iterative backtracking solver.
+- `can_place.m`: Sudoku rule helper for row/column/box validation.
 
 ### GUI Utilities
-- `read_grid_from_handles.m`, `highlight_cells.m`, `update_status.m`: GUI
-- `apply_theme.m`, `get_active_theme.m`, `toggle_theme_callback.m`: theme management
+- `read_grid_from_handles.m`: extracts grid data using linear indexing.
+- `highlight_cells.m`: colors cell handles (white for normal, red for error).
+- `update_status.m`: updates the GUI status bar text.
+- `set_buttons_enabled.m`: toggles Enable state for 'Check' and 'Clear Entries' buttons.
+- `apply_theme`: updates UI to match the selected visual style.
 
 ### Custom Puzzle Files
 - `puzzle1.txt`: Custom Sudoku puzzle #1

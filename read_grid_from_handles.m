@@ -2,7 +2,7 @@ function [grid, invalidMask] = read_grid_from_handles(cellHandles)
 % READ_GRID_FROM_HANDLES  Extracts numeric values from the UI grid.
 
 grid = zeros(9);
-% invalidMask - typos that aren't numbers(true)
+% invalidMask - typos that aren't numbers
 invalidMask = false(9);
 
 for i = 1:numel(cellHandles)
@@ -13,10 +13,10 @@ for i = 1:numel(cellHandles)
     end
 
     value = str2double(str);
-    % Check if input is a valid Sudoku digit (1-9)
+    % check if input is a valid Sudoku digit (1-9)
     if isnan(value) || value < 1 || value > 9 || value ~= floor(value)
         grid(i) = 0;
-        invalidMask(idx) = true;
+        invalidMask(i) = true;
     else
         grid(i) = value;
     end

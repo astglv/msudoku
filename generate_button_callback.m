@@ -1,9 +1,11 @@
 function generate_button_callback(src, level)
+% GENERATE_BUTTON_CALLBACK  Creates a new Sudoku puzzle.
+
 fig = gcf;
 cellHandles = getappdata(fig, 'cellHandles');
 if isempty(cellHandles), return; end
 
-switch lower(level)
+switch level
     case 'easy'
         blanks = 30;
     case 'medium'
@@ -16,7 +18,6 @@ end
 
 fullG = generate_full();
 puz = make_puzzle(fullG, blanks);
-
 if isempty(cellHandles)
     return;
 end
@@ -38,16 +39,7 @@ setappdata(fig,'moves',0);
 setappdata(fig,'mistakes',0);
 setappdata(fig,'gameActive',true);
 update_status(fig,sprintf('Status: new %s puzzle, blanks=%d',level,blanks));
-
 apply_theme(fig);
-
-buttonHandles = getappdata(fig,'buttonHandles');
-if ~isempty(buttonHandles)
-    % Indices: 5 = Check, 6 = Clear Entries
-    checkButtonIndex = 5;
-    clearEntriesButtonIndex = 6;
-    set(buttonHandles(5), 'Enable', 'on');
-    set(buttonHandles(6), 'Enable', 'on');
-end
+set_buttons_enabled(fig, 'on')
 
 end

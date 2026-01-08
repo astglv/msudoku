@@ -1,4 +1,5 @@
 function apply_theme(fig)
+% APPLY_THEME updates UI to match the selected visual style.
 
 if nargin == 0 || isempty(fig) || ~ishandle(fig)
     fig = gcf;
@@ -6,10 +7,10 @@ end
 
 style = getappdata(fig, 'style');
 
-% Paint the background
+% paint the background
 set(fig, 'Color', style.figureBg);
 
-% Paint the cells
+% paint the cells
 cellHandles = getappdata(fig, 'cellHandles');
 for i = 1:numel(cellHandles)
     h = cellHandles(i);
@@ -27,7 +28,7 @@ for i = 1:numel(cellHandles)
     end
 end
 
-% Paint the buttons
+% paint the buttons
 buttonHandles = getappdata(fig, 'buttonHandles');
 for i = 1:numel(buttonHandles)
     h = buttonHandles(i);
@@ -37,7 +38,7 @@ for i = 1:numel(buttonHandles)
     end
 end
 
-% 4. Paint the text cells
+% paint the text cells
 handlesToUpdate = [getappdata(fig, 'statusHandle'), ...
                    getappdata(fig, 'movesHandle'), ...
                    getappdata(fig, 'mistakesHandle')];

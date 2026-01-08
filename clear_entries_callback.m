@@ -1,9 +1,9 @@
 function clear_entries_callback(src,~)
-fig = gcf;
+% CLEAR_ENTRIES_CALLBACK removes only user-inputted numbers.
 
+fig = gcf;
 cellHandles = getappdata(fig,'cellHandles');
 puzzle = getappdata(fig,'puzzle');
-
 if isempty(cellHandles)
     return;
 end
@@ -24,20 +24,10 @@ end
 setappdata(fig,'moves',0);
 apply_theme(fig);
 update_status(fig,'Status: user entries cleared');
-buttonHandles = getappdata(fig,'buttonHandles');
-if ~isempty(buttonHandles)
-    % Предполагаем, что Check имеет индекс 5. ПРОВЕРЬТЕ ИНДЕКС!
-    checkButtonIndex = 5;
 
-    % Clear Entries (индекс 6) уже нажата, ее нужно только убедиться, что она 'on'
-    clearEntriesButtonIndex = 6;
-
-    if numel(buttonHandles) >= clearEntriesButtonIndex && ishandle(buttonHandles(clearEntriesButtonIndex))
-        set(buttonHandles(clearEntriesButtonIndex), 'Enable', 'on');
-    end
-    if numel(buttonHandles) >= checkButtonIndex && ishandle(buttonHandles(checkButtonIndex))
-        set(buttonHandles(checkButtonIndex), 'Enable', 'on');
-    end
+btns = getappdata(fig, 'buttonHandles');
+if ~isempty(buttonHandles) && numel(btns) >= 6
+    set(btns([5, 6]), 'Enable', 'on'); % enable 'check' and 'clear entries' buttons
 end
 
-
+end

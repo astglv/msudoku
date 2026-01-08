@@ -1,9 +1,9 @@
 function check_button_callback(src,~)
+% CHECK_BUTTON_CALLBACK identifies rule violations, updates mistake counts, and checks for win/loss conditions.
 
 fig = gcf;
 style = getappdata(fig, 'style');
 cellHandles = getappdata(fig,'cellHandles');
-
 if isempty(cellHandles)
     return;
 end
@@ -25,28 +25,22 @@ for r = 1:9
     end
 end
 
-% Moves and Mistakes Logic
-gameActive = getappdata(fig,'gameActive');
-moves = getappdata(fig,'moves');
-
-% 3. MASK LOGIC
+% mask logic
 allErrors = invalidMask | conflictMask;
 puzzle = getappdata(fig, 'puzzle');
-userEntered = (puzzle == 0 & G ~= 0); % Cells filled by player
+userEntered = (puzzle == 0 & G ~= 0); % cells filled by player
 userErrorMask = userEntered & allErrors;
 correctMask = userEntered & ~allErrors;
 
-% 4. HIGHLIGHTING (Flat Style)
 highlight_cells(cellHandles, allErrors, style.highlight);
 highlight_cells(cellHandles, correctMask, style.correctHighlight);
 
-% 5. GAME STATUS AND MISTAKES
+% game status and mistakes
 gameActive = getappdata(fig, 'gameActive');
 if ~gameActive, return; end
 
 errorCount = sum(userErrorMask(:));
 if errorCount > 0
-    % Handle Mistakes
     mistakes = getappdata(fig, 'mistakes') + errorCount;
     setappdata(fig, 'mistakes', mistakes);
 
@@ -61,7 +55,7 @@ if errorCount > 0
         update_status(fig, sprintf('Status: %d conflicts found!', errorCount));
     end
 else
-    % No errors found
+    % no errors found
     if all(G(:) ~= 0)
         update_status(fig, 'Status: WIN! Puzzle completed.');
         setappdata(fig, 'gameActive', false);
@@ -70,14 +64,5 @@ else
         update_status(fig, 'Status: Current entries are correct.');
     end
 end
-end
-
-function set_buttons_enabled(fig, state)
-    % Helper to disable/enable key buttons
-    btns = getappdata(fig, 'buttonHandles');
-    if numel(btns) >= 6
-        set(btns(5), 'Enable', state); % Check button
-        set(btns(6), 'Enable', state); % Clear Entries button
-    end
 
 end
