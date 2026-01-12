@@ -16,7 +16,7 @@ and validation helpers.
     - `randperm` - random permutation of integers
 
 - **Functions, for-loops, while, if, switch used in the form shown in the exercises**
-- 
+
 - **Working with matrices and vectors as practiced in the exercises**
 
 - **Use 3 levels/difficulty tiers**
@@ -37,8 +37,20 @@ and validation helpers.
   - `showIntro`: logical, controls whether to show an introduction (default: true)
   - `loadPuzzleFile`: string, path to .txt file to load puzzle from (default: '')
 
-- **Ability to quit at any time**
-  - Window can be closed at any time using the standard window close button.
+### Example Usage with Parameters:
+```matlab
+% Start with introduction
+sudoku_gui()
+
+% Start without introduction
+sudoku_gui(false)
+
+% Start and load a puzzle file
+sudoku_gui(true, 'puzzle1.txt')
+
+% Start without introduction and load puzzle
+sudoku_gui(false, 'puzzle2.txt')
+```
 
 - **Winner and number of moves/achieved score**
   - Winner detection: When the puzzle is completed correctly, displays "WIN! Completed in X moves"
@@ -59,11 +71,6 @@ and validation helpers.
   - **Handle Management**: Uses `gcf` (Get Current Figure) to identify the active window during callbacks.
   - **Data Persistence**: Uses `setappdata` and `getappdata` to share the Sudoku matrix and move counters between separate .m files.
   - **Uicontrols**: All 81 grid cells and game buttons are created as handles, allowing for real-time color and text updates.
-
-- **Code aesthetics**
-
-- **Code efficiency** 
-
 
 ### Creativity
 
@@ -93,21 +100,6 @@ and validation helpers.
 7. **Clear All**: Reset the entire board
 8. **Load Puzzle**: Load a custom puzzle from a .txt file
 9. **Close**: Close the window using the standard window close button
-
-### Example Usage with Parameters:
-```matlab
-% Start with introduction
-sudoku_gui()
-
-% Start without introduction
-sudoku_gui(false)
-
-% Start and load a puzzle file
-sudoku_gui(true, 'puzzle1.txt')
-
-% Start without introduction and load puzzle
-sudoku_gui(false, 'puzzle2.txt')
-```
 
 ## File Overview
 
