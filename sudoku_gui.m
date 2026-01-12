@@ -46,7 +46,6 @@ if showIntro
         '- Solve: Auto-complete the puzzle';
         '- Clear Entries: Remove only your entered digits';
         '- Clear All: Reset the entire board';
-        '- Theme: Toggle between Day and Night themes';
         ' ';
         'SCORING:';
         '- Moves: Number of moves you made';
